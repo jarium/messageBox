@@ -2,9 +2,9 @@ package server
 
 import (
 	"github.com/google/uuid"
+	"github.com/jarium/messageBox/internal/box"
+	"github.com/jarium/messageBox/pkg/connector"
 	"io"
-	"messageBox/internal/box"
-	"messageBox/pkg/connector"
 )
 
 type Server struct {

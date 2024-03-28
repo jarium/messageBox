@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/jarium/messageBox/internal/server"
+	pb "github.com/jarium/messageBox/pkg/connector"
 	"google.golang.org/grpc"
 	"log"
-	"messageBox/internal/server"
-	pb "messageBox/pkg/connector"
 	"net"
 )
 
