@@ -24,5 +24,9 @@ func New(addr string) (*Connector, error) {
 }
 
 func (c *Connector) CloseConnection() error {
+	if c.connection == nil {
+		return nil
+	}
+
 	return c.connection.Close()
 }
