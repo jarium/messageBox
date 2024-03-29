@@ -1,6 +1,6 @@
 # messageBox
 
-Quick start
+Installation
 ---
 ```bash
 export GOPRIVATE=github.com/jarium/messageBox 
