@@ -14,7 +14,7 @@ func New(addr string) (*Connector, error) {
 	conn, err := grpc.Dial(addr, grpc.WithInsecure(), grpc.WithBlock(), grpc.WithTimeout(time.Second*5))
 
 	if err != nil {
-		return nil, err
+		return &Connector{}, err
 	}
 
 	return &Connector{
