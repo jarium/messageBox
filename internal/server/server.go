@@ -42,6 +42,7 @@ func (s *Server) ReceiveMessages(_ *connector.Void, stream connector.MessageBox_
 		msg := s.box.Pop()
 
 		if err := stream.Send(msg); err != nil {
+			s.box.Push(msg)
 			return err
 		}
 	}
