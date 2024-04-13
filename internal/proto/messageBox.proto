@@ -5,12 +5,8 @@ option go_package = "messageBox/pkg/connector";
 package messageBox;
 
 service MessageBox {
-  rpc sendMessages(stream SendMessageRequest) returns (SendMessageResponse);
+  rpc sendMessages(stream Message) returns (SendMessageResponse);
   rpc receiveMessages(void) returns (stream Message);
-}
-
-message SendMessageRequest {
-  string message = 1;
 }
 
 message SendMessageResponse {

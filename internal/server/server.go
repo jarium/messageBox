@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/jarium/messageBox/internal/box"
 	"github.com/jarium/messageBox/pkg/connector"
@@ -20,7 +21,7 @@ func NewServer() *Server {
 
 func (s *Server) SendMessages(stream connector.MessageBox_SendMessagesServer) error {
 	for {
-		msg, err := stream.Recv()
+		m, err := stream.Recv()
 
 		if err == io.EOF {
 			return stream.SendAndClose(&connector.SendMessageResponse{Success: true})
@@ -30,20 +31,27 @@ func (s *Server) SendMessages(stream connector.MessageBox_SendMessagesServer) er
 			return err
 		}
 
-		s.box.Push(&connector.Message{
-			Uuid:    uuid.New().String(),
-			Message: msg.Message,
-		})
+		if m.Uuid == "" {
+			m.Uuid = uuid.New().String()
+		}
+
+		fmt.Printf("info: msg received with id:%s msg:%s\n", m.Uuid, m.Message)
+
+		s.box.Push(m)
 	}
 }
 
 func (s *Server) ReceiveMessages(_ *connector.Void, stream connector.MessageBox_ReceiveMessagesServer) error {
 	for {
-		msg := s.box.Pop()
+		m := s.box.Pop()
 
-		if err := stream.Send(msg); err != nil {
-			s.box.Push(msg)
+		if err := stream.Send(m); err != nil {
+			fmt.Printf("send msg to consumer err:%s", err)
+
+			s.box.Push(m)
 			return err
 		}
+
+		fmt.Printf("info: msg sent to consumer with id:%s msg:%s\n", m.Uuid, m.Message)
 	}
 }

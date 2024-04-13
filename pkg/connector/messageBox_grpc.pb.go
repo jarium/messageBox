@@ -44,7 +44,7 @@ func (c *messageBoxClient) SendMessages(ctx context.Context, opts ...grpc.CallOp
 }
 
 type MessageBox_SendMessagesClient interface {
-	Send(*SendMessageRequest) error
+	Send(*Message) error
 	CloseAndRecv() (*SendMessageResponse, error)
 	grpc.ClientStream
 }
@@ -53,7 +53,7 @@ type messageBoxSendMessagesClient struct {
 	grpc.ClientStream
 }
 
-func (x *messageBoxSendMessagesClient) Send(m *SendMessageRequest) error {
+func (x *messageBoxSendMessagesClient) Send(m *Message) error {
 	return x.ClientStream.SendMsg(m)
 }
 
@@ -138,7 +138,7 @@ func _MessageBox_SendMessages_Handler(srv interface{}, stream grpc.ServerStream)
 
 type MessageBox_SendMessagesServer interface {
 	SendAndClose(*SendMessageResponse) error
-	Recv() (*SendMessageRequest, error)
+	Recv() (*Message, error)
 	grpc.ServerStream
 }
 
@@ -150,8 +150,8 @@ func (x *messageBoxSendMessagesServer) SendAndClose(m *SendMessageResponse) erro
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *messageBoxSendMessagesServer) Recv() (*SendMessageRequest, error) {
-	m := new(SendMessageRequest)
+func (x *messageBoxSendMessagesServer) Recv() (*Message, error) {
+	m := new(Message)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
