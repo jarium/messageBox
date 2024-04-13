@@ -33,6 +33,10 @@ func (s *Server) SendMessages(stream connector.MessageBox_SendMessagesServer) er
 
 		if m.Uuid == "" {
 			m.Uuid = uuid.New().String()
+		} else { //existing message, sent from consumer
+			//@todo: save unprocessable message to a data source
+			fmt.Printf("message sent back again by consumer, unprocessable message:%s id:%s\n", m.Message, m.Uuid)
+			continue
 		}
 
 		fmt.Printf("info: msg received with id:%s msg:%s\n", m.Uuid, m.Message)
