@@ -19,7 +19,7 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterMessageBoxServer(s, server.NewServer())
 
-	fmt.Println("listening grpc connections")
+	fmt.Println("info: listening grpc connections")
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
