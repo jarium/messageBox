@@ -1,0 +1,17 @@
+version: '3'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+          - PORT=50051
+        ports:
+          - '50051:50051'
+        networks:
+            - microservice-network
+        volumes:
+            - './:/app'
+networks:
+    microservice-network:
+        external: true
