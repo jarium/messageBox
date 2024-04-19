@@ -1,18 +1,21 @@
-FROM golang:latest
+# Build stage
+FROM golang:latest AS builder
+WORKDIR /app
 
-ENV PROJECT_DIR=/app \
-    GO111MODULE=on \
+# Environment variables for Go
+ENV GO111MODULE=on \
     CGO_ENABLED=0
 
-WORKDIR /app
-RUN mkdir "/build"
+# Copy the source code into the container
 COPY . .
 
-RUN go get github.com/githubnemo/CompileDaemon
-RUN go install github.com/githubnemo/CompileDaemon
+# Build the application
+RUN go build -o messagebox ./cmd
 
-ENTRYPOINT CompileDaemon -build="go build -o /build/app ./cmd" -command="/build/app"
+# Final stage
+FROM alpine:latest
+WORKDIR /root/
+COPY --from=builder /app/messagebox .
 
-RUN apt-get update
-RUN apt-get install sudo
-RUN apt-get install nano
+# Run the binary
+CMD ["./messagebox"]
