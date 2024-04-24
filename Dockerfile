@@ -16,6 +16,9 @@ RUN go build -o messagebox ./cmd
 FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /app/messagebox .
+COPY --from=builder /app/cmd/grpc_health_probe .
+
+RUN chmod +x /root/grpc_health_probe
 
 # Run the binary
 CMD ["./messagebox"]

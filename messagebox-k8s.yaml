@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: messagebox-deployment
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
   replicas: 2
   selector:
     matchLabels:
@@ -14,10 +19,17 @@ spec:
     spec:
       containers:
         - name: messagebox
-          image: messagebox:latest
+          image: messagebox:2.7
           imagePullPolicy: Never
           ports:
             - containerPort: 50051
+          readinessProbe:
+            exec:
+              command:
+                - /root/grpc_health_probe
+                - -addr=:50051
+            initialDelaySeconds: 5
+            periodSeconds: 1
 
 ---
 apiVersion: v1
