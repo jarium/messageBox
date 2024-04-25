@@ -7,7 +7,7 @@ import (
 
 type Connector struct {
 	Client     MessageBoxClient
-	connection *grpc.ClientConn
+	Connection *grpc.ClientConn
 }
 
 func New(addr string) (*Connector, error) {
@@ -19,14 +19,14 @@ func New(addr string) (*Connector, error) {
 
 	return &Connector{
 		Client:     NewMessageBoxClient(conn),
-		connection: conn,
+		Connection: conn,
 	}, nil
 }
 
 func (c *Connector) CloseConnection() error {
-	if c.connection == nil {
+	if c.Connection == nil {
 		return nil
 	}
 
-	return c.connection.Close()
+	return c.Connection.Close()
 }

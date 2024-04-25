@@ -10,15 +10,16 @@ ENV GO111MODULE=on \
 COPY . .
 
 # Build the application
-RUN go build -o messagebox ./cmd
+RUN go build -o messagebox ./cmd/main.go
+
+# Build the custom health check binary
+RUN go build -o healthcheck ./cmd/healthcheck.go
 
 # Final stage
 FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /app/messagebox .
-COPY --from=builder /app/cmd/grpc_health_probe .
-
-RUN chmod +x /root/grpc_health_probe
+COPY --from=builder /app/healthcheck .
 
 # Run the binary
 CMD ["./messagebox"]

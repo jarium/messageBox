@@ -19,17 +19,16 @@ spec:
     spec:
       containers:
         - name: messagebox
-          image: messagebox:2.7
+          image: messagebox:2.9
           imagePullPolicy: Never
           ports:
             - containerPort: 50051
           readinessProbe:
             exec:
               command:
-                - /root/grpc_health_probe
-                - -addr=:50051
-            initialDelaySeconds: 5
-            periodSeconds: 1
+                - /root/healthcheck
+            initialDelaySeconds: 10
+            periodSeconds: 5
           resources:
             requests:
               memory: "64Mi"
